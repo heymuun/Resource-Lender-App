@@ -49,7 +49,6 @@ resource-lender/
       └─ seed.ts
 ```
 
-What I added(Shashwat)
 - Directory structure and minimal boilerplate files for the web and api apps.
 - `db/prisma/schema.prisma` using SQLite and a small set of models (User, Listing, Loan).
 - `db/prisma/seed.ts` to create example users.
@@ -110,4 +109,5 @@ Or run both using `docker-compose` (if you want to build images/containers):
 ```powershell
 docker-compose up --build
 ```
+
 
