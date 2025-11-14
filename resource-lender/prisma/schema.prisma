@@ -11,9 +11,14 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
+  password  String?
   createdAt DateTime @default(now())
-  listings  Listing[]
-  loans     Loan[]
+
+  // Named relation for listings owned by the user
+  listings  Listing[] @relation("UserListings")
+
+  // Named relation for loans borrowed by the user
+  loans     Loan[]    @relation("UserLoans")
 }
 
 model Listing {
@@ -21,8 +26,13 @@ model Listing {
   title       String
   description String?
   ownerId     Int
-  owner       User     @relation(fields: [ownerId], references: [id])
+
+  // Connects to User.listings via the "UserListings" relation
+  owner       User     @relation("UserListings", fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
+
+  // This is the missing field that caused your error
+  loans       Loan[]
 }
 
 model Loan {
@@ -31,6 +41,10 @@ model Loan {
   borrowerId Int
   status     String   @default("pending")
   createdAt  DateTime @default(now())
+
+  // This relation automatically connects to Listing.loans
   listing    Listing  @relation(fields: [listingId], references: [id])
-  borrower   User     @relation(fields: [borrowerId], references: [id])
+
+  // Connects to User.loans via the "UserLoans" relation
+  borrower   User     @relation("UserLoans", fields: [borrowerId], references: [id])
 }
