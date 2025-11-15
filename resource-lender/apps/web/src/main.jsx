@@ -1,21 +1,13 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import './styles.css'
 
-const rootEl = document.getElementById('root')
-if (rootEl) {
-  createRoot(rootEl).render(
-    <React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
       <App />
-    </React.StrictMode>
-  )
-} else {
-  // Fallback: mount to body if #root not present
-  const fallback = document.createElement('div')
-  document.body.appendChild(fallback)
-  createRoot(fallback).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  )
-}
+    </BrowserRouter>
+  </React.StrictMode>
+)
