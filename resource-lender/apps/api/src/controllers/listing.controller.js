@@ -8,7 +8,7 @@ export async function fetchListings(req, res){
 }
 
 export async function createListing(req, res){
-  const {title, description} = req.body;
+  const {title, description, category} = req.body;
   const userCookie = req.cookies?.userCredentials;
   const idUser = userCookie.id;
   const userIdFromCookie = Number(idUser);
@@ -16,11 +16,13 @@ export async function createListing(req, res){
     data: {
     title,
     description,
+    category,
     owner: {
           connect: {
             id: userIdFromCookie
           }
-        }
+        },
+    isAvailable: true
   }
   });
   return res.status(201).json({
@@ -43,15 +45,21 @@ export async function fetchSpecificListing(req, res){
 }
 
 export async function searchListings(req, res){
-  const query = req.query.q;
+  const { q, category } = req.query;
+  const whereClause = {};
+  if (q) {
+    whereClause.title = {
+    contains: q
+  };
+  }
+  if (category) {
+    whereClause.category = category;
+  }
   const listings = await prisma.listing.findMany({
-    where : {
-      title: {
-        contains: query
-      } 
-    }
+      where: whereClause,
   });
   return res.status(200).json({
     data: listings
   });
 }
+
